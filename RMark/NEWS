@@ -1,3 +1,16 @@
+RMark 3.2.0 (22 Sept 2026)
+
+CHANGE
+
+* Code was added to make.design.data for HidMarkov model so it would add subtract.stratum for pi parameter. These can be changed by the user but these function as defaults. Previous versions would have failed with number of events > 1.
+
+* Code also added to make.design.data to sort the design data for Delta so that the real parameter labels were correct. This was mostly important for simulation code.
+
+NEW FEATURES
+
+* Eleven new models were added in RMark including MARK model numbers 147-150, 152-155, 162, 181-182.
+
+
 RMark 3.1.0 (24 July 2026)
 
 CHANGE

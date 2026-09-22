@@ -49,11 +49,14 @@ function(model,nocc,mixtures=1)
 	fdir=system.file(package="RMark")	
 	fdir=file.path(fdir,"models.txt")	
 	model_definitions=read.delim(fdir,header=TRUE,
-			colClasses=c("numeric","character","character",rep("logical",4),rep("numeric",3),"logical"))
-    model_def=model_definitions[model_definitions$model==model,]	
+	     colClasses=c("numeric","character","character",rep("logical",4),rep("numeric",3),rep("logical",3),"character"))
+	model_def=model_definitions[model_definitions$model==model,]	
     if(nrow(model_def)==0)
-        stop("Invalid type of model = ",model," Valid types are\n", paste(model_definitions$model,collapse="\n"))
-	if(mixtures==1) 
+    {
+      cat(" Valid model names are\n",paste(model_definitions$model,collapse=","))
+      stop("Invalid model name = ",model)
+    }
+    if(mixtures==1) 
 		model_def$mixtures=model_def$default.mixtures
 	else
 		model_def$mixtures=mixtures
@@ -63,8 +66,9 @@ function(model,nocc,mixtures=1)
 	{
 		fdir=system.file(package="RMark")	
 		fdir=file.path(fdir,"DerivedPar.txt")	
-		deriv_pars=read.delim(fdir,header=TRUE,	colClasses=c("numeric","character"))
-		model_def$derived_labels=list(deriv_pars$dpar_label[deriv_pars$MarkNumber==model_def$MarkNumber])
+		deriv_pars=read.delim(fdir,header=TRUE,	colClasses=c("numeric","character",rep("logical",3),"character","logical","character"))
+		model_def=as.list(model_def)
+		model_def$derived_labels=list(deriv_pars[deriv_pars$MarkNumber == model_def$MarkNumber,])[[1]]
 	}
     return(as.list(model_def))
 }
