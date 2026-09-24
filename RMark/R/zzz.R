@@ -18,73 +18,74 @@ print_RMark.version <- function()
 
 create_markpath=function()
 {
-	markpath=Sys.which("mark.exe")
-	if(markpath!="")
-	{
-		markpath="mark.exe"
-    return(markpath)
-	}
-	if(!exists("MarkPath"))
-	{
-		markpath=c("c:/Program Files/Mark","c:/Program Files (x86)/Mark")
-		markpath=markpath[file.exists(markpath)]
-	}else
-	{
-		if(substr(MarkPath,nchar(MarkPath),nchar(MarkPath))%in%c("\\","/")) MarkPath=substr(MarkPath,1,(nchar(MarkPath)-1))
-		markpath=MarkPath
-	}
-	markstrings=c("mark.exe","mark32.exe","mark64.exe")
-	if(length(markpath)!=0)
-	{
-		markpath=as.vector(sapply(markpath,function(x)paste(x,markstrings,sep="/")))
-		which.exists=file.exists(markpath)
-	}else
-		which.exists=rep(FALSE,3)
-	if(any(which.exists)) 
-	{
-		if(which.exists[1])
-		   markpath=shQuote(markpath[1])
-	    else
-	    {
-		   if(R.Version()$arch=="x86_64")
-		   {
-			   if(which.exists[3])
-				   markpath=shQuote(markpath[3])
-			   else
-			   {
-				   warning("\n Warning:mark64.exe does not exist. Using mark32.exe\n")
-				   markpath=shQuote(markpath[2])
-			   }
-		   } else
-		   {
-			   if(which.exists[2])
-				   markpath=shQuote(markpath[2])
-			   else
-			   {
-				   warning("\n Warning:mark32.exe does not exist. Using mark64.exe\n")
-				   markpath=shQuote(markpath[3])
-			   }
-	       }
-	   }
-    } else
-	{
-		if(exists("MarkPath"))message("no mark.exe found in specified MarkPath location. Looking for an exe in operating system Path.\n")
-		if(!exists("markpath") || length(markpath)>1)
-		{
-			inPath=Sys.which(markstrings)!=""
-			if(inPath[1])
-				markpath=shQuote(markstrings[1])
-			else
-			if(inPath[3]&R.Version()$arch=="x86_64")
-				markpath=shQuote(markstrings[3])
-			else
-			if(inPath[2])
-				markpath=shQuote(markstrings[2])
-			else
-				markpath=NULL
-		}
-   }
-return(markpath)
+  # Default executable names in preference order
+  if(R.version$arch %in% c("x86_64","aarch64","arm64"))
+    execs = c("mark","mark64","mark32")
+  else
+    execs = \c("mark","mark32")
+  
+  # Add executable suffix
+  suff = ifelse(R.version$os == "mingw32", ".exe", "")
+  execs = paste(execs, suff, sep =)
+
+  # Initialize path
+  markpath = NULL
+  
+  if(exists(MarkPath)){
+    # Check for mark executables in specified path
+    paths = execs |> 
+      sapply(\(x)file.path(MarkPath,x)) 
+    
+    paths = paths[file.exists(paths)]
+    
+    if(lengths(paths) > 0)
+      markpath = paths[1] 
+    else
+      message("No mark executable found in specified MarkPath: ", MarkPath,".")
+  }
+  
+  if(is.null(markpath)){
+    # Check for mark excutables in user's path
+    message("Checking system directories.")
+  
+    paths = execs |> 
+      sapply(\(exec) Sys.which(exec))
+    
+    if(any(paths != ""))
+      markpath <- paths[1]
+  else
+    message("No mark executable found in user's path.")
+  }
+  
+  if(is.null(markpath)){
+    # Check default directories
+    if(R.version$os == "mingw32"){
+      # Define default locations
+      MarkPath=c("c:/Program Files/Mark","c:/Program Files (x86)/Mark")
+      
+      paths <- MarkPath |> 
+        sapply(\(path) execs |> 
+                 sapply(\(x)file.path(path,x))) |> 
+        as.vector()
+      
+      paths <- paths[file.exists(paths)]
+      
+      if(length(paths) > 0)
+        markpath <- paths[1]
+      else
+        message("No executables found in default locations.")
+    }
+  }
+  
+  if(is.null(markpath))
+    stop("No executable found.")
+  else{
+    message("Found MARK executable: ", markpath,"\n")
+    
+    markpath |> 
+      shQuote() |> 
+      return()
+  }
 }
 
 checkMarkVersion <- function(markpath=markpath)
