@@ -1947,7 +1947,7 @@ create.agenest.var=function(data,init.agevar,time.intervals)
               }
               if(parx %in% c("pi","Omega"))
               { 
-	                if(is.null(data$events)) 
+                  if(is.null(data$events) | data$model=="HMMMSJollySeber")  
 	                    number.of.events=1
                   else
 	                    number.of.events=length(data$events)
