@@ -981,6 +981,7 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 #  *******************  END OF INTERNAL FUNCTIONS    *********************************
 # Test to make sure that all rows of design data are there (no more deletion) and make sure they
 # are ordered
+  if(!is.list(ddl))stop("if specified the second argument is supposed to be a list for design data (ddl)")
   missing=FALSE
   for(i in 1:(length(ddl)-1))
   {

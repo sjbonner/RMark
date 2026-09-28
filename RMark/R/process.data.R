@@ -267,10 +267,10 @@ robust.occasions<-function(times)
       # Exclude "0" and "." from strata vector and other values depending on MS model
       exclude=c("0",".")
       if(model=="MSLiveDead") exclude=c(exclude,"1")
-      if(model=="HidMarkov") 
+      if(model%in%c("HidMarkov","HMMMSJollySeber") )
       {
-        if(is.null(strata.labels))stop("strata.labels must be specified for Hidden Markov model")
-        if(is.null(events))stop("events must be specified for Hidden Markov model")
+        if(is.null(strata.labels))stop("strata.labels must be specified for hidden Markov type models")
+        if(is.null(events))stop("events must be specified for hidden Markov type models")
         exclude=c(exclude,events)
       }
       if(model%in%c("RDMSOpenMisClass","RDMSMisClass","RDMS2MisClass","RDMSOpenMCSeas","RDMSOpenMCSeas2"))exclude=c(exclude,"u")
