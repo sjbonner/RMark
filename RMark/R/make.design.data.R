@@ -768,7 +768,7 @@ else
    pimtypes=pimtypes[!null.design.data]
    names(pimtypes)=names(parameters)
    full.design.data$pimtypes=pimtypes
-   if(data$model=="HidMarkov"){
+   if(data$model%in%c("HidMarkov","HMMMSJollySeber")){
      full.design.data$Delta=full.design.data$Delta[order(full.design.data$Delta$group,full.design.data$Delta$event,full.design.data$Delta$stratum),]
      full.design.data$Delta$par.index=min(full.design.data$Delta$par.index):max(full.design.data$Delta$par.index)
      full.design.data$Delta$model.index=min(full.design.data$Delta$model.index):max(full.design.data$Delta$model.index)

@@ -733,7 +733,7 @@ else
 for (i in 1:length(parameters)) {
   for (j in 1:length(model$pims[[i]]))
   {
-         if(model$model=="MSJollySeber" &i==5)model$pims[[i]][[j]]$stratum=NULL
+         if(model$model%in%c("MSJollySeber","HMMMSJollySeber") &i==5)model$pims[[i]][[j]]$stratum=NULL
          ncol = dim(model$pims[[i]][[j]]$pim)[2]
          string=pim.header(pim[[i]][[j]]$group,param.names[i],parameters[[i]],
                    ncol,model$pims[[i]][[j]]$stratum,model$pims[[i]][[j]]$tostratum,model$strata.labels,
@@ -1392,7 +1392,7 @@ create.agenest.var=function(data,init.agevar,time.intervals)
   npar=1
   for(i in 1:length(parameters))
   {
-     if(data$model=="MSJollySeber"&names(parameters)[i]=="pi")parameters[[i]]$num=parameters[[i]]$num+nstrata-2
+     if(data$model%in%c("MSJollySeber","HMMMSJollySeber")&names(parameters)[i]=="pi")parameters[[i]]$num=parameters[[i]]$num+nstrata-2
      pim[[i]]=list()
      k=0
      for(j in 1:number.of.groups)
@@ -1403,7 +1403,7 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 	        events=data$events
 	      for(jjj in events)
 	      {
-	        if(is.null(parameters[[i]]$bystratum)||!parameters[[i]]$bystratum||(data$model=="MSJollySeber"&names(parameters)[i]=="pi"))
+	        if(is.null(parameters[[i]]$bystratum)||!parameters[[i]]$bystratum||(data$model%in%c("MSJollySeber","HMMMSJollySeber")&names(parameters)[i]=="pi"))
 	          xstrata=1
 	        else
 	          if(!is.null(parameters[[i]]$events)&&parameters[[i]]$events)

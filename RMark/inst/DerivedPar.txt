@@ -311,4 +311,11 @@ MarkNumber	dpar_label	Group	Strata	Occasion	OccNum	Session	SessNum
 184	Method1IRT 1 Individual Residency Time	TRUE	TRUE	FALSE	0	TRUE	nocc
 184	Method1ADT Attribute Duration Time	TRUE	TRUE	FALSE	0	TRUE	nocc
 184	Method2ADT Attribute Duration Time	TRUE	TRUE	FALSE	0	TRUE	nocc
+185	N*	TRUE	FALSE	FALSE	0	FALSE	0
+185	N_TSA(s*t)	TRUE	TRUE	TRUE	nocc	FALSE	0
+185	N_TSA(t)	TRUE	FALSE	TRUE	nocc	FALSE	0
+185	Ingress	TRUE	FALSE	FALSE	0	FALSE	0
+185	Egress	TRUE	FALSE	FALSE	0	FALSE	0
+185	ResTime1	TRUE	FALSE	FALSE	0	FALSE	0
+185	ResTime2	TRUE	FALSE	FALSE	0	FALSE	0
 

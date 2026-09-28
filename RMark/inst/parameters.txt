@@ -636,3 +636,9 @@ Multistate3RE	sigmap	0	1		Square	all	log	~stratum						TRUE
 Multistate3RE	p	1	-1	0	Triang	all	logit	~stratum						TRUE									
 Multistate3RE	sigmaPsi	0	1		Square	all	log	~-1+stratum:tostratum						TRUE	TRUE					
 Multistate3RE	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRUE								
+HMMMSJollySeber	S	0	-1	1	Triang	all	logit	~stratum						TRUE						
+HMMMSJollySeber	p	0	0	0	Triang	all	logit	~stratum						TRUE						
+HMMMSJollySeber	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRUE					
+HMMMSJollySeber	pent	1	-1	0	Square	all	mlogit	~1						TRUE						
+HMMMSJollySeber	pi	0	1		Square	all	mlogit	~1						TRUE		1				
+HMMMSJollySeber	Delta	1	0	0	Triang	all	mlogit	~1						TRUE						TRUE
