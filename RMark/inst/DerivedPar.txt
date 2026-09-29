@@ -239,12 +239,15 @@ MarkNumber	dpar_label	Group	Strata	Occasion	OccNum	Session	SessNum
 137	SIF Species Interaction Factor	TRUE	FALSE	FALSE	0	FALSE	0
 137	OccupancySpeciesB	TRUE	FALSE	FALSE	0	FALSE	0
 137	OccupancyBoth Species	TRUE	FALSE	FALSE	0	FALSE	0
-141	SpeciesAOccupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
-141	SpeciesB|A Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
-141	SpeciesB|not A Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
-141	SpeciesBOccupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	A Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	B|A Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	B|not A Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	B Occupancy	TRUE	FALSE	FALSE	0	TRUE	nocc
 141	OccupancyBoth Species	TRUE	FALSE	FALSE	0	TRUE	nocc
 141	SIF Species Interaction Factor	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	A only Species Interaction Factor	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	B Only	TRUE	FALSE	FALSE	0	TRUE	nocc
+141	Unoccupied	TRUE	FALSE	FALSE	0	TRUE	nocc
 142	Method1RT Individual Residency Time	TRUE	TRUE	FALSE	0	TRUE	nocc
 142	Method1ADT Attribute Duration Time	TRUE	TRUE	FALSE	0	TRUE	nocc
 142	Method2ADT Attribute Duration Time	TRUE	TRUE	FALSE	0	TRUE	nocc
@@ -275,6 +278,13 @@ MarkNumber	dpar_label	Group	Strata	Occasion	OccNum	Session	SessNum
 154	lambda Rate of Change	NA	NA	FALSE	0	TRUE	nocc-1
 154	logodds(lambda)	NA	NA	FALSE	0	TRUE	nocc-1
 155	S Overall Survival	NA	NA	FALSE	0	FALSE	0
+156	psi-Occupancy	TRUE	FALSE	FALSE	0	FALSE	0
+156	psi Probability Occupied	TRUE	FALSE	FALSE	0	TRUE	nocc
+156	lambda Rate of Change	TRUE	FALSE	FALSE	0	TRUE	nocc-1
+156	logodds(lambda)	TRUE	FALSE	FALSE	0	TRUE	nocc-1
+157	psi Probability Occupied	TRUE	FALSE	FALSE	0	TRUE	nocc
+157	lambda Rate of Change	TRUE	FALSE	FALSE	0	TRUE	nocc-1
+157	logodds(lambda)	TRUE	FALSE	FALSE	0	TRUE	nocc-1
 158	Mu Mean Resighting Rate	TRUE	FALSE	TRUE	secnocc	FALSE	0
 159	Mu Mean Resighting Rate	TRUE	FALSE	TRUE	secnocc	FALSE	0
 159	Population Estimate	TRUE	FALSE	TRUE	secnocc	FALSE	0

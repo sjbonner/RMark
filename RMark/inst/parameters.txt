@@ -642,3 +642,13 @@ HMMMSJollySeber	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRU
 HMMMSJollySeber	pent	1	-1	0	Square	all	mlogit	~1						TRUE						
 HMMMSJollySeber	pi	0	1		Square	all	mlogit	~1						TRUE		1				
 HMMMSJollySeber	Delta	1	0	0	Triang	all	mlogit	~1						TRUE						TRUE
+OccupancyFP	p10	0	0	0	Square	all	logit	~1															
+OccupancyFP	p11	0	0	0	Square	all	logit	~1															
+OccupancyFP	b	0	0	0	Square	all	logit	~1															
+OccupancyFP	Psi	0	1		Square	all	logit	~1															
+RDOccupFPEG	Psi	0	1		Square	all	logit	~1					FALSE										
+RDOccupFPEG	Epsilon	0	-1		Square	all	logit	~1	FALSE	Gamma			FALSE										
+RDOccupFPEG	Gamma	0	-1		Square	all	logit			Epsilon			FALSE										
+RDOccupFPEG	p10	0	0	0	Square	all	logit	~1					TRUE										
+RDOccupFPEG	p11	0	0	0	Square	all	logit	~1					TRUE										
+RDOccupFPEG	b	0	0	0	Square	all	logit	~1					TRUE										
