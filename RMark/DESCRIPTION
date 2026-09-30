@@ -1,6 +1,6 @@
 Package: RMark
-Version: 3.1.0
-Date: 2026-7-24
+Version: 3.2.0
+Date: 2026-9-22
 Title: R Code for Mark Analysis
 Authors@R: c(person(given = "Simon",
                         family = "Bonner",
