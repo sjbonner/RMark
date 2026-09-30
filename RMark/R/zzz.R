@@ -30,7 +30,7 @@ create_markpath=function()
     
     # Add executable suffix
     suff = ifelse(R.version$os == "mingw32", ".exe", "")
-    execs = paste(execs, suff, sep =)
+    execs = paste(execs, suff, sep = "")
   }  
 
   # Initialize path
