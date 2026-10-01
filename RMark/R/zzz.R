@@ -101,6 +101,7 @@ checkMarkVersion <- function(markpath=markpath)
     packageStartupMessage("Please update MARK to current version posted 25 January 2026 to obtain MARK version number\n")
   else
   {
+    packageStartupMessage("Mark version: ", x[1])
     suppressWarnings(x<-as.numeric(strsplit(x[1]," ")[[1]]))
     if(x[!is.na(x)][1]<11.2)
       packageStartupMessage("Warning:Reported MARK version is less than required")
