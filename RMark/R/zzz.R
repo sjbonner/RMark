@@ -88,7 +88,8 @@ create_markpath=function()
   else{
     packageStartupMessage("Found MARK executable: ", markpath,"\n")
     
-    markpath <- markpath
+    markpath <- markpath |> 
+      path.expand()
     
     return(markpath)
   }
