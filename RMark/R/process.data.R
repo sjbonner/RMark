@@ -273,6 +273,11 @@ robust.occasions<-function(times)
         if(is.null(events))stop("events must be specified for hidden Markov type models")
         exclude=c(exclude,events)
       }
+      if(model%in%c("MSBarker","MSUncBarker","MSUnc2Barker")) 
+      {
+        if(is.null(strata.labels))stop("strata.labels must be specified for MSBarker type models")
+        exclude=c(exclude,"u","U",tolower(strata.labels))
+      }
       if(model%in%c("RDMSOpenMisClass","RDMSMisClass","RDMS2MisClass","RDMSOpenMCSeas","RDMSOpenMCSeas2"))exclude=c(exclude,"u")
       inp.strata.labels=sort(ch.values[!(ch.values %in% exclude)])
       nstrata = length(inp.strata.labels) 

@@ -652,3 +652,15 @@ RDOccupFPEG	Gamma	0	-1		Square	all	logit			Epsilon			FALSE
 RDOccupFPEG	p10	0	0	0	Square	all	logit	~1					TRUE										
 RDOccupFPEG	p11	0	0	0	Square	all	logit	~1					TRUE										
 RDOccupFPEG	b	0	0	0	Square	all	logit	~1					TRUE										
+MSBarker	S	0	0	1	Triang	all	logit	~stratum						TRUE						
+MSBarker	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRUE					
+MSBarker	p	1	-1	0	Triang	all	logit	~stratum						TRUE						
+MSBarker	R	0	0	0	Triang	all	logit	~stratum	FALSE	RPrime				TRUE						
+MSBarker	RPrime	0	0	0	Triang	all	logit	~stratum		R				TRUE						
+MSBarker	r	0	0	0	Triang	all	logit	~stratum						TRUE						
+MSBarker	Delta	1	-1	1	Triang	all	logit	~stratum						TRUE						
+MSBarker	rho	0	0	1	Triang	all	logit	~stratum	FALSE	rhoPrime				TRUE						
+MSBarker	rhoPrime	0	0	1	Triang	all	logit	~stratum		rho				TRUE						
+MSBarker	b	0	0	1	Triang	all	logit	~stratum						TRUE						
+MSBarker	pi	0	0	1	Square	all	mlogit	~1						TRUE		1				
+				
