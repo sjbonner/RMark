@@ -1,5 +1,5 @@
 Package: RMark
-Version: 3.2.0
+Version: 3.2.1
 Date: 2026-9-22
 Title: R Code for Mark Analysis
 Authors@R: c(person(given = "Simon",
