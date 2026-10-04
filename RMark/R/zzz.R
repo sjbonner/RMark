@@ -6,7 +6,7 @@ print_RMark.version <- function()
 		um <- strsplit(version," ")[[1]]
   	    version <- um[nchar(um)>0][2]
 	}
-	hello <- paste("This is RMark ",version,"\n"," Documentation for RMark is available at https://github.com/jlaake/RMark/blob/master/RMarkDocumentation.zip\n",
+	hello <- paste("This is RMark ",version,"\n"," Documentation for RMark is available at https://github.com/sjbonner/RMark/blob/master/RMarkDocumentation.zip\n",
 	               " Documentation for MARK and capture-recapture models is available at https://ecooch.github.io/markbook.github.io/",sep="")
 	packageStartupMessage(hello)
 }
@@ -18,73 +18,81 @@ print_RMark.version <- function()
 
 create_markpath=function()
 {
-	markpath=Sys.which("mark.exe")
-	if(markpath!="")
-	{
-		markpath="mark.exe"
+  # Check for user defined executable name
+  if(exists("MarkExec")){
+    execs = MarkExec
+  } else{
+    # Default executable names in preference order
+    if(R.version$arch %in% c("x86_64","aarch64","arm64"))
+      execs = c("mark","mark64","mark32")
+    else
+      execs = c("mark","mark32")
+    
+    # Add executable suffix
+    suff = ifelse(R.version$os == "mingw32", ".exe", "")
+    execs = paste(execs, suff, sep = "")
+  }  
+
+  # Initialize path
+  markpath = NULL
+  
+  if(exists("MarkPath")){
+    # Check for mark executables in specified path
+    
+    paths = execs |> 
+      sapply(\(x)file.path(MarkPath,x)) 
+    
+    paths = paths[file.exists(paths)]
+    
+    if(lengths(paths) > 0)
+      markpath = paths[1] 
+    else
+      packageStartupMessage("No mark executable found in specified MarkPath: ", MarkPath,".")
+  }
+  
+  if(is.null(markpath)){
+    # Check for mark excutables in user's path
+    packageStartupMessage("Checking system directories.")
+  
+    paths = execs |> 
+      sapply(\(exec) Sys.which(exec))
+    
+    if(any(paths != ""))
+      markpath <- paths[1]
+  else
+    packageStartupMessage("No mark executable found in user's path.")
+  }
+  
+  if(is.null(markpath)){
+    # Check default directories
+    if(R.version$os == "mingw32"){
+      # Define default locations
+      MarkPath=c("c:/Program Files/Mark","c:/Program Files (x86)/Mark")
+      
+      paths <- MarkPath |> 
+        sapply(\(path) execs |> 
+                 sapply(\(x)file.path(path,x))) |> 
+        as.vector()
+      
+      paths <- paths[file.exists(paths)]
+      
+      if(length(paths) > 0)
+        markpath <- paths[1]
+      else
+        packageStartupMessage("No executables found in default locations.")
+    }
+  }
+  
+  if(is.null(markpath))
+    stop("No executable found.")
+  else{
+    packageStartupMessage("Found MARK executable: ", markpath,"\n")
+    
+    markpath <- markpath |> 
+      path.expand()
+    
     return(markpath)
-	}
-	if(!exists("MarkPath"))
-	{
-		markpath=c("c:/Program Files/Mark","c:/Program Files (x86)/Mark")
-		markpath=markpath[file.exists(markpath)]
-	}else
-	{
-		if(substr(MarkPath,nchar(MarkPath),nchar(MarkPath))%in%c("\\","/")) MarkPath=substr(MarkPath,1,(nchar(MarkPath)-1))
-		markpath=MarkPath
-	}
-	markstrings=c("mark.exe","mark32.exe","mark64.exe")
-	if(length(markpath)!=0)
-	{
-		markpath=as.vector(sapply(markpath,function(x)paste(x,markstrings,sep="/")))
-		which.exists=file.exists(markpath)
-	}else
-		which.exists=rep(FALSE,3)
-	if(any(which.exists)) 
-	{
-		if(which.exists[1])
-		   markpath=shQuote(markpath[1])
-	    else
-	    {
-		   if(R.Version()$arch=="x86_64")
-		   {
-			   if(which.exists[3])
-				   markpath=shQuote(markpath[3])
-			   else
-			   {
-				   warning("\n Warning:mark64.exe does not exist. Using mark32.exe\n")
-				   markpath=shQuote(markpath[2])
-			   }
-		   } else
-		   {
-			   if(which.exists[2])
-				   markpath=shQuote(markpath[2])
-			   else
-			   {
-				   warning("\n Warning:mark32.exe does not exist. Using mark64.exe\n")
-				   markpath=shQuote(markpath[3])
-			   }
-	       }
-	   }
-    } else
-	{
-		if(exists("MarkPath"))message("no mark.exe found in specified MarkPath location. Looking for an exe in operating system Path.\n")
-		if(!exists("markpath") || length(markpath)>1)
-		{
-			inPath=Sys.which(markstrings)!=""
-			if(inPath[1])
-				markpath=shQuote(markstrings[1])
-			else
-			if(inPath[3]&R.Version()$arch=="x86_64")
-				markpath=shQuote(markstrings[3])
-			else
-			if(inPath[2])
-				markpath=shQuote(markstrings[2])
-			else
-				markpath=NULL
-		}
-   }
-return(markpath)
+  }
 }
 
 checkMarkVersion <- function(markpath=markpath)
@@ -94,6 +102,7 @@ checkMarkVersion <- function(markpath=markpath)
     packageStartupMessage("Please update MARK to current version posted 25 January 2026 to obtain MARK version number\n")
   else
   {
+    packageStartupMessage("Mark version: ", x[1])
     suppressWarnings(x<-as.numeric(strsplit(x[1]," ")[[1]]))
     if(x[!is.na(x)][1]<11.2)
       packageStartupMessage("Warning:Reported MARK version is less than required")
@@ -104,42 +113,10 @@ checkMarkVersion <- function(markpath=markpath)
 
 checkForMark<-function()
 {
-	if(R.Version()$os=="mingw32")
-	{
-	   markpath=create_markpath()
-	   if(is.null(markpath) || length(markpath)==0)
-	   {
-	     packageStartupMessage("Warning: Software mark.exe,mark32.exe or mark64.exe not found in path or in c:/Program Files/mark or c:/Program Files (x86)/mark\n. It is available at http://www.phidot.org/software/mark/\n")
-	     packageStartupMessage('         If you have mark.exe, you will need to set MarkPath object to its location (e.g. MarkPath="C:/Users/Jeff Laake/Desktop"')
-	   }
-	   else
-	   {
-	     if(markpath!="mark.exe")
-	        checkMarkVersion(markpath=substring(markpath,2,nchar(markpath)-1))
-	     else
-	       checkMarkVersion(markpath=markpath)
-	   }
-   }else
-	   if(exists("MarkPath")) 
-     {
-	      isep="/"
-	      if(substr(MarkPath,nchar(MarkPath),nchar(MarkPath))%in%c("\\","/")) isep=""
-  		  MarkPath=paste(MarkPath,"mark",sep=isep)
-	      if(!file.exists(MarkPath)) 
-	        packageStartupMessage(paste("mark executable cannot be found at specified MarkPath location:",MarkPath,"\n"))	
-  		  else
-  		     checkMarkVersion(markpath=MarkPath)
-      } else
-        {
- 	       if(Sys.which("mark")=="")
-	       {
- 	         packageStartupMessage("Warning: Software mark not found in path.\n")
- 	         packageStartupMessage("If you have mark executable, you will need to set MarkPath object to its location.")
- 	       } else
- 	       {
- 	         checkMarkVersion(markpath="mark")
- 	       }
-	    }
+  markpath=create_markpath()
+
+  checkMarkVersion(markpath)
+  
 	invisible()
 }
 
