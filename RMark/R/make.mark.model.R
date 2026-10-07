@@ -1254,24 +1254,24 @@ create.agenest.var=function(data,init.agevar,time.intervals)
      if(is.null(data$events))
       string=paste("proc title ",title,";\nproc chmatrix occasions=",nocc," groups=",number.of.groups," etype=",etype," Nodes=",nodes)
      else
-       string=paste("proc title ",title,";\nproc chmatrix occasions=",nocc," groups=",number.of.groups," etype=",etype, " events=",length(data$events),sep="")
-  else
+       if(is.null(data$eventsp))
+          string=paste("proc title ",title,";\nproc chmatrix occasions=",nocc," groups=",number.of.groups," etype=",etype, " events=",length(data$events),sep="")
+       else
+          string=paste("proc title ",title,";\nproc chmatrix occasions=",nocc," groups=",number.of.groups," etype=",etype, " events=",length(data$events),
+                       " eventsp=", length(data$eventsp), " eventsLR=", length(data$eventsLR)," eventsBR=", length(data$eventsBR),sep="")
+    else
      string=paste("proc title ",title,";\nproc chmatrix occasions=",sum(nocc.secondary)," groups=",number.of.groups," etype=",etype," Nodes=",nodes)
   if(model.list$strata)string=paste(string," strata=",data$nstrata,sep="")
   if(!is.null(covariates))
   {
-#	 if(any(nchar(covariates)>10))
-#	    stop(paste("\nThe following covariates are longer than 10 characters which is the max length for MARK\n",paste(covariates[nchar(covariates)>10]),collapse=","))	 
-#	 covar10=covariates[duplicated((substr(covariates,1,10)))]
-#	 if(length(covar10)>0) stop(paste("\nFollowing covariates are duplicates of another covariate within the first 10 characters\n",paste(covar10,collapse=", ")))
      string=paste(string," icovar = ",length(covariates))
-	 if(!is.null(icvalues))
-	 {
-		 if(length(covariates)!=length(icvalues))
-			 stop("\nMismatch between length of individual covariates and covariate values (icvalues)\n")
-	     if(!is.numeric(icvalues)) 
-			 stop("\nicvalues must be numeric\n")
-	 }
+	   if(!is.null(icvalues))
+	   {
+		   if(length(covariates)!=length(icvalues))
+			   stop("\nMismatch between length of individual covariates and covariate values (icvalues)\n")
+	       if(!is.numeric(icvalues)) 
+			   stop("\nicvalues must be numeric\n")
+	   }
   }
   if(mixtures!=1)
      string=paste(string," mixtures =",mixtures)

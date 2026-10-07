@@ -590,11 +590,18 @@ else
 		       mscale=1
 		       if(data$model=="RDMultScalOcc" &names(parameters)[i]=="Theta")mscale=data$mixtures
 		       if(data$model=="NSpeciesOcc" &names(parameters)[i]=="f")parameters[[i]]$rows=2^data$mixtures-1 -data$mixtures
+		       these_events=data$events
+		       if(data$model%in%c("MSUncBarker","MSUnc2Barker"))
+		       {
+		         if(names(parameters)[i]%in%c("pi","Delta"))these_events=data$eventsp
+		         if(names(parameters)[i]%in%c("rho","rhoPrime"))these_events=data$eventsLR
+		         if(names(parameters)[i]%in%c("b"))these_events=data$eventsBR
+		       }
 		       design.data=compute.design.data(data,parameters[[i]]$begin,parameters[[i]]$num,
 		                                       parameters[[i]]$type,parameters[[i]]$mix,parameters[[i]]$rows,
 		                                       parameters[[i]]$pim.type,parameters[[i]]$secondary, nstrata,
 		                                       tostrata,strata.labels,subtract.stratum,common.zero=common.zero,
-		                                       sub.stratum=sub.stratum,limits=limits,events=data$events,use.events=parameters[[i]]$events,
+		                                       sub.stratum=sub.stratum,limits=limits,events=these_events,use.events=parameters[[i]]$events,
 		                                       mscale=mscale,subtract.events=subtract.events)
 		     }
         if(!is.null(parameters[[i]]$mix) && parameters[[i]]$mix)design.data$mixture=as.factor(design.data$mixture)

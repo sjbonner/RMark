@@ -111,6 +111,9 @@
 #' survival (S) in Multistratum models
 #' @param areas values of areas (1 per group) for Densitypc set of models
 #' @param events vector of character events for Hidden Markov models
+#' @param eventsp number of events or vector of events for occasion sightings in MSUncBarker and MSUnc2Barker models
+#' @param eventsLR number of events or vector of events for live resighting in MSUncBarker and MSUnc2Barker models
+#' @param eventsBR number of events or vector of events for dead recoveries in MSUncBarker and MSUnc2Barker models
 #' @return processed.data (a list with the following elements)
 #' \item{data}{original raw dataframe with group factor variable added if
 #' groups were defined} \item{model}{type of analysis model (eg, "CJS",
@@ -145,7 +148,8 @@
 #' 
 process.data <-
 function(data,begin.time=1,model="CJS",mixtures=1,groups=NULL,allgroups=FALSE,age.var=NULL,
-initial.ages=c(0),age.unit=1,time.intervals=NULL,nocc=NULL,strata.labels=NULL,counts=NULL,reverse=FALSE,areas=NULL,events=NULL)
+initial.ages=c(0),age.unit=1,time.intervals=NULL,nocc=NULL,strata.labels=NULL,counts=NULL,
+reverse=FALSE,areas=NULL,events=NULL,eventsp=NULL,eventsLR=NULL,eventsBR=NULL)
 {
 # if tbl change to data.frame
 if(inherits(data,"tbl_df"))data=as.data.frame(data)
@@ -273,11 +277,25 @@ robust.occasions<-function(times)
         if(is.null(events))stop("events must be specified for hidden Markov type models")
         exclude=c(exclude,events)
       }
-      if(model%in%c("MSBarker","MSUncBarker","MSUnc2Barker")) 
+      if(model%in%c("MSBarker")) 
       {
         if(is.null(strata.labels))stop("strata.labels must be specified for MSBarker type models")
         exclude=c(exclude,"u","U",tolower(strata.labels))
       }
+      if(model%in%c("MSUncBarker","MSUnc2Barker")) 
+      {
+        if(is.null(strata.labels))stop("strata.labels must be specified for MSBarker type models")
+        if(is.null(eventsp))stop("eventsp must be specified for MSUncBarker type models")
+        if(is.null(eventsLR))stop("eventsLR must be specified for MSUncBarker type models")
+        if(is.null(eventsBR))stop("eventsBR must be specified for MSUncBarker type models")
+        if(!is.numeric(eventsp) | !is.numeric(eventsLR) | !is.numeric(eventsBR))stop("eventsp,eventsLR and eventsBR must be numeric for MSUncBarker type models")
+        if(is.null(events))stop("events must be specified for MSUncBarker type models")
+        if(is.numeric(events) & length(events==1))events=1:events
+        if(length(events)!=(eventsp+eventsLR+eventsBR))stop("\nlength of events must match sum of eventsp+eventsLR+eventsBR")
+        
+        exclude=c(exclude,tolower(strata.labels),events)
+      }
+      
       if(model%in%c("RDMSOpenMisClass","RDMSMisClass","RDMS2MisClass","RDMSOpenMCSeas","RDMSOpenMCSeas2"))exclude=c(exclude,"u")
       inp.strata.labels=sort(ch.values[!(ch.values %in% exclude)])
       nstrata = length(inp.strata.labels) 
@@ -302,7 +320,8 @@ robust.occasions<-function(times)
           if(!all(inp.strata.labels %in% strata.labels))
             stop(paste("Some strata labels in data",paste(inp.strata.labels,collapse=","),"are not in strata.labels"))
           if(sum(as.numeric(strata.labels %in% inp.strata.labels))< (nstrata-1))
-              message("Note: More than one non-observable state has been specified")
+              if(!model%in% c("MSUncBarker","MSUnc2Barker"))
+                message("Note: More than one non-observable state has been specified")
         }
         if(nstrata<2)stop("\nAny multistrata model must have at least 2 strata\n")
       } else
@@ -441,30 +460,36 @@ if(number.of.factors==0)
 	}	
    if(has.freq)
    {
-#       if(model=="js")
-#       {
-#          data=add.dummy.data(data,nocc=nocc,group.covariates=NULL)     
-#          number.of.ch=dim(data)[1]
-#       }
-       return(list(data=data,model=model,mixtures=mixtures,
+       if(model%in%c("MSUncBarker","MSUnc2Barker"))
+          return(list(data=data,model=model,mixtures=mixtures,
                    freq=matrix(data$freq,ncol=1,dimnames=list(1:number.of.ch,"group1")),
                    nocc=nocc, nocc.secondary=nocc.secondary,time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
-                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
-   }
-   else
+                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
+                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+       else
+         return(list(data=data,model=model,mixtures=mixtures,
+                     freq=matrix(data$freq,ncol=1,dimnames=list(1:number.of.ch,"group1")),
+                     nocc=nocc, nocc.secondary=nocc.secondary,time.intervals=time.intervals,begin.time=begin.time,
+                     age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
+                     strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
+   }   else
    {
        data$freq=rep(1,number.of.ch)
-#       if(model=="js")
-#       {
-#          data=add.dummy.data(data,nocc=nocc,group.covariates=NULL)            
-#          number.of.ch=dim(data)[1]
-#       }
-       return(list(data=data,model=model,mixtures=mixtures,
+       if(model%in%c("MSUncBarker","MSUnc2Barker"))
+          return(list(data=data,model=model,mixtures=mixtures,
                    freq=matrix(rep(1,number.of.ch),ncol=1,dimnames=list(1:number.of.ch,"group1")),
                    nocc=nocc,  nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
-                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
+                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
+                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+       else
+          return(list(data=data,model=model,mixtures=mixtures,
+                     freq=matrix(rep(1,number.of.ch),ncol=1,dimnames=list(1:number.of.ch,"group1")),
+                     nocc=nocc,  nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
+                     age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
+                     strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
+                     
    }
 }
 #
@@ -599,14 +624,19 @@ else
 #
 # Return data as a list with original dataframe and frequency matrix
 #
-#  if(model=="js")
-#     data=add.dummy.data(data,nocc,group.covariates)     
-#  else
   if(!has.freq)data$freq=NULL
-  return(list(data=data,model=model,mixtures=mixtures,freq=freqmat,
+  if(model%in%c("MSUncBarker","MSUnc2Barker"))
+      return(list(data=data,model=model,mixtures=mixtures,freq=freqmat,
                    nocc=nocc, nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=init.ages,
                    group.covariates=group.covariates,nstrata=nstrata,
-                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
+                   strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
+                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+  else
+    return(list(data=data,model=model,mixtures=mixtures,freq=freqmat,
+                nocc=nocc, nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
+                age.unit=age.unit,initial.ages=init.ages,
+                group.covariates=group.covariates,nstrata=nstrata,
+                strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events))
 }
 }
