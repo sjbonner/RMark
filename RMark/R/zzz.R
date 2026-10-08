@@ -44,7 +44,7 @@ create_markpath=function()
     
     paths = paths[file.exists(paths)]
     
-    if(lengths(paths) > 0)
+    if(length(paths) > 0)
       markpath = paths[1] 
     else
       packageStartupMessage("No mark executable found in specified MarkPath: ", MarkPath,".")
