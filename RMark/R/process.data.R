@@ -111,9 +111,9 @@
 #' survival (S) in Multistratum models
 #' @param areas values of areas (1 per group) for Densitypc set of models
 #' @param events vector of character events for Hidden Markov models
-#' @param neventsp number of events for occasion sightings in MSUncBarker and MSUnc2Barker models
-#' @param neventsr number of events for live resighting in MSUncBarker and MSUnc2Barker models
-#' @param neventsR number of events for dead recoveries in MSUncBarker and MSUnc2Barker models
+#' @param neventsp number of events for recaptures in MSUncBarker and MSUnc2Barker models
+#' @param neventsr number of events for dead recoveries in MSUncBarker and MSUnc2Barker models
+#' @param neventsR number of events for live resightings and living throughtout the interval or live resightings before death in the interval in MSUncBarker and MSUnc2Barker 
 #' @return processed.data (a list with the following elements)
 #' \item{data}{original raw dataframe with group factor variable added if
 #' groups were defined} \item{model}{type of analysis model (eg, "CJS",
