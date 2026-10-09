@@ -111,9 +111,9 @@
 #' survival (S) in Multistratum models
 #' @param areas values of areas (1 per group) for Densitypc set of models
 #' @param events vector of character events for Hidden Markov models
-#' @param eventsp number of events or vector of events for occasion sightings in MSUncBarker and MSUnc2Barker models
-#' @param eventsLR number of events or vector of events for live resighting in MSUncBarker and MSUnc2Barker models
-#' @param eventsBR number of events or vector of events for dead recoveries in MSUncBarker and MSUnc2Barker models
+#' @param neventsp number of events for occasion sightings in MSUncBarker and MSUnc2Barker models
+#' @param neventsr number of events for live resighting in MSUncBarker and MSUnc2Barker models
+#' @param neventsR number of events for dead recoveries in MSUncBarker and MSUnc2Barker models
 #' @return processed.data (a list with the following elements)
 #' \item{data}{original raw dataframe with group factor variable added if
 #' groups were defined} \item{model}{type of analysis model (eg, "CJS",
@@ -149,7 +149,7 @@
 process.data <-
 function(data,begin.time=1,model="CJS",mixtures=1,groups=NULL,allgroups=FALSE,age.var=NULL,
 initial.ages=c(0),age.unit=1,time.intervals=NULL,nocc=NULL,strata.labels=NULL,counts=NULL,
-reverse=FALSE,areas=NULL,events=NULL,eventsp=NULL,eventsLR=NULL,eventsBR=NULL)
+reverse=FALSE,areas=NULL,events=NULL,neventsp=NULL,neventsr=NULL,neventsR=NULL)
 {
 # if tbl change to data.frame
 if(inherits(data,"tbl_df"))data=as.data.frame(data)
@@ -285,13 +285,13 @@ robust.occasions<-function(times)
       if(model%in%c("MSUncBarker","MSUnc2Barker")) 
       {
         if(is.null(strata.labels))stop("strata.labels must be specified for MSBarker type models")
-        if(is.null(eventsp))stop("eventsp must be specified for MSUncBarker type models")
-        if(is.null(eventsLR))stop("eventsLR must be specified for MSUncBarker type models")
-        if(is.null(eventsBR))stop("eventsBR must be specified for MSUncBarker type models")
-        if(!is.numeric(eventsp) | !is.numeric(eventsLR) | !is.numeric(eventsBR))stop("eventsp,eventsLR and eventsBR must be numeric for MSUncBarker type models")
+        if(is.null(neventsp))stop("neventsp must be specified for MSUncBarker type models")
+        if(is.null(neventsr))stop("neventsr must be specified for MSUncBarker type models")
+        if(is.null(neventsR))stop("neventsR must be specified for MSUncBarker type models")
+        if(!is.numeric(neventsp) | !is.numeric(neventsr) | !is.numeric(neventsR))stop("neventsp,neventsr and neventsR must be numeric for MSUncBarker type models")
         if(is.null(events))stop("events must be specified for MSUncBarker type models")
         if(is.numeric(events) & length(events==1))events=1:events
-        if(length(events)!=(eventsp+eventsLR+eventsBR))stop("\nlength of events must match sum of eventsp+eventsLR+eventsBR")
+        if(length(events)!=(neventsp+neventsr+neventsR))stop("\nlength of events must match sum of neventsp+neventsr+neventsR")
         
         exclude=c(exclude,tolower(strata.labels),events)
       }
@@ -466,7 +466,7 @@ if(number.of.factors==0)
                    nocc=nocc, nocc.secondary=nocc.secondary,time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
        else
          return(list(data=data,model=model,mixtures=mixtures,
                      freq=matrix(data$freq,ncol=1,dimnames=list(1:number.of.ch,"group1")),
@@ -482,7 +482,7 @@ if(number.of.factors==0)
                    nocc=nocc,  nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
        else
           return(list(data=data,model=model,mixtures=mixtures,
                      freq=matrix(rep(1,number.of.ch),ncol=1,dimnames=list(1:number.of.ch,"group1")),
@@ -631,7 +631,7 @@ else
                    age.unit=age.unit,initial.ages=init.ages,
                    group.covariates=group.covariates,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:eventsp],eventsLR=events[(eventsp+1):(eventsp+eventsLR)],eventsBR=events[(eventsp+eventsLR+1):(length(events))]))
+                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
   else
     return(list(data=data,model=model,mixtures=mixtures,freq=freqmat,
                 nocc=nocc, nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,

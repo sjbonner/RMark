@@ -674,4 +674,15 @@ MSUncBarker	rho	0	0	1	Triang	all	mlogit	~stratum	FALSE	rhoPrime				TRUE						TRU
 MSUncBarker	rhoPrime	0	0	1	Triang	all	mlogit	~stratum		rho				TRUE						TRUE
 MSUncBarker	b	0	0	1	Triang	all	mlogit	~stratum						TRUE						TRUE
 MSUncBarker	pi	0	0	1	Square	all	mlogit	~1						TRUE		1				TRUE
+MSUnc2Barker	S	0	0	1	Triang	all	logit	~stratum						TRUE						
+MSUnc2Barker	Psi	0	0	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRUE					
+MSUnc2Barker	p	1	-1	0	Triang	all	logit	~stratum						TRUE						
+MSUnc2Barker	R	0	0	0	Triang	all	logit	~stratum	FALSE	RPrime				TRUE						
+MSUnc2Barker	RPrime	0	0	0	Triang	all	logit	~stratum		R				TRUE						
+MSUnc2Barker	r	0	0	0	Triang	all	logit	~stratum						TRUE						
+MSUnc2Barker	Delta	1	-1	1	Triang	all	mlogit	~stratum						TRUE						TRUE
+MSUnc2Barker	rho	0	0	1	Triang	all	mlogit	~stratum	FALSE	rhoPrime				TRUE						TRUE
+MSUnc2Barker	rhoPrime	0	0	1	Triang	all	mlogit	~stratum		rho				TRUE						TRUE
+MSUnc2Barker	b	0	0	1	Triang	all	mlogit	~stratum						TRUE						TRUE
+MSUnc2Barker	pi	0	0	1	Square	all	mlogit	~1						TRUE		1				TRUE
 				

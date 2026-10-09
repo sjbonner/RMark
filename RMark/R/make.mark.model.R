@@ -594,10 +594,10 @@ if(type%in%c("Triang","STriang"))
 			  param.name=paste(param.name,"[",stratum,"]",sep="")
 		  else
 		  {
-		    if(param.name%in%c("Delta","pi") & !is.null(event))
+		    if(param.name%in%c("Delta","pi","rho","rho'","b") & !is.null(event))
 		    {
-		      if(param.name=="Delta") 
-		        param.name=paste("Delta ",event,"|",stratum,sep="")
+		      if(param.name%in%c("Delta","rho","rho'","b"))
+		        param.name=paste(param.name," ",event,"|",stratum,sep="")
 		      else
 		        param.name=paste("pi ",stratum,"|",event,sep="")
 		    } else
@@ -1402,6 +1402,12 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 	        events=1 
 	      else 
 	        events=data$events
+	      if(data$model%in%c("MSUncBarker","MSUnc2Barker"))
+	      {
+	        if(names(parameters)[i]%in%c("pi","Delta")) events=data$eventsp
+	        if(names(parameters)[i]%in%c("rho","rhoPrime")) events=data$eventsLR
+	        if(names(parameters)[i]%in%c("b")) events=data$eventsBR
+	      }
 	      for(jjj in events)
 	      {
 	        if(is.null(parameters[[i]]$bystratum)||!parameters[[i]]$bystratum||(data$model%in%c("MSJollySeber","HMMMSJollySeber")&names(parameters)[i]=="pi"))
@@ -1798,6 +1804,8 @@ create.agenest.var=function(data,init.agevar,time.intervals)
      design.matrix[[i]]=as.data.frame(design.matrix[[i]],stringsAsFactors=FALSE)
      if(parameters[[i]]$formula=="~1")
         names(design.matrix[[i]])[1]="(Intercept)"
+     if(length(names(design.matrix[[i]]))==0) 
+       stop("no columns in design matrix for ",names(parameters)[i])
      names(design.matrix[[i]])=paste(names(parameters)[i],names(design.matrix[[i]]),sep=":")
   } 
   }
@@ -1951,6 +1959,8 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 	                    number.of.events=1
                   else
 	                    number.of.events=length(data$events)
+                  if(data$model%in%c("MSUncBarker","MSUnc2Barker") & parx=="pi")
+                    number.of.events=length(data$eventsp)
                   for(kkk in 1:number.of.events)
 	                for (kk in 1:number.of.groups)
 	                {
@@ -1959,11 +1969,20 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 			              string=c(string,paste("mlogit(",logit.numbers,")",sep=""))
 	                }			 				 
                }
-				       if(parx=="Delta"){
+				       if(parx=="Delta" | (data$model%in%c("MSUncBarker","MSUnc2Barker") & parx%in%c("rho","rhoPrime","b"))){
 				              if(is.null(data$events)) 
 				                  number.of.events=1
 				              else
 				                  number.of.events=length(data$events)
+				              if(data$model%in%c("MSUncBarker","MSUnc2Barker"))
+				              {
+				                if(parx=="Delta")
+				                  number.of.events=length(data$eventsp)
+				                if(parx%in%c("rho","rhoPrime"))
+				                  number.of.events=length(data$eventsLR)
+				                if(parx%in%c("b"))
+				                  number.of.events=length(data$eventsBR)
+				              }
 				              for (kk in 1:number.of.groups)
 				              {
 				                 logit.numbers=max.logit.number+rep(1:(nrow(full.ddl[[parx]])/(number.of.events*number.of.groups)),number.of.events)
@@ -1982,7 +2001,7 @@ create.agenest.var=function(data,init.agevar,time.intervals)
 			                    string=c(string,paste("mlogit(",new.indices[k],")",sep="")) 
 				              max.logit.number=max.logit.number+max(new.indices)
 				       }
-				       if(!parx%in%c("Psi","pent","alpha","pi","Omega","Delta")&!(parx=="p" & data$model=="RDMSOccupancy"))
+				       if(!parx%in%c("Psi","pent","alpha","pi","Omega","Delta","rho","rhoPrime","b")&!(parx=="p" & data$model=="RDMSOccupancy"))
 				              stop(paste("Mlogit link not allowed with parameter",parx))
             } else
             {
