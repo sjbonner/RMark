@@ -466,7 +466,7 @@ if(number.of.factors==0)
                    nocc=nocc, nocc.secondary=nocc.secondary,time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
+                   eventsp=events[1:neventsp],eventsBR=events[(neventsp+1):(neventsp+neventsR)],eventsLR=events[(neventsp+neventsR+1):(length(events))]))
        else
          return(list(data=data,model=model,mixtures=mixtures,
                      freq=matrix(data$freq,ncol=1,dimnames=list(1:number.of.ch,"group1")),
@@ -482,7 +482,7 @@ if(number.of.factors==0)
                    nocc=nocc,  nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
                    age.unit=age.unit,initial.ages=initial.ages[1],group.covariates=NULL,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
+                   eventsp=events[1:neventsp],eventsBR=events[(neventsp+1):(neventsp+neventsR)],eventsLR=events[(neventsp+neventsR+1):(length(events))]))
        else
           return(list(data=data,model=model,mixtures=mixtures,
                      freq=matrix(rep(1,number.of.ch),ncol=1,dimnames=list(1:number.of.ch,"group1")),
@@ -631,7 +631,7 @@ else
                    age.unit=age.unit,initial.ages=init.ages,
                    group.covariates=group.covariates,nstrata=nstrata,
                    strata.labels=strata.labels,counts=counts,reverse=reverse,areas=areas,events=events,
-                   eventsp=events[1:neventsp],eventsLR=events[(neventsp+1):(neventsp+neventsr)],eventsBR=events[(neventsp+neventsr+1):(length(events))]))
+                  eventsp=events[1:neventsp],eventsBR=events[(neventsp+1):(neventsp+neventsR)],eventsLR=events[(neventsp+neventsR+1):(length(events))]))
   else
     return(list(data=data,model=model,mixtures=mixtures,freq=freqmat,
                 nocc=nocc, nocc.secondary=nocc.secondary, time.intervals=time.intervals,begin.time=begin.time,
