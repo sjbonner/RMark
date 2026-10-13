@@ -469,7 +469,7 @@ else
 #
   if(data$model=="HidMarkov")
     if(is.null(parameters$pi$subtract.stratum))
-      parameters$pi$subtract.stratum=rep(data$strata.labels[1],length(data$events))
+      parameters$pi$subtract.stratum=rep(data$strata.labels[length(data$strata.labels)],length(data$events))
 #
 # Create a data matrix for the each parameter in the model with age, year and cohort for each index
 # This data matrix (design.data) is used below to create the design matrix from the formulas
@@ -594,8 +594,8 @@ else
 		       if(data$model%in%c("MSUncBarker","MSUnc2Barker"))
 		       {
 		         if(names(parameters)[i]%in%c("pi","Delta"))these_events=data$eventsp
-		         if(names(parameters)[i]%in%c("rho","rhoPrime"))these_events=data$eventsLR
-		         if(names(parameters)[i]%in%c("b"))these_events=data$eventsBR
+		         if(names(parameters)[i]%in%c("rho","rhoPrime"))these_events=data$eventsBR
+		         if(names(parameters)[i]%in%c("b"))these_events=data$eventsLR
 		       }
 		       design.data=compute.design.data(data,parameters[[i]]$begin,parameters[[i]]$num,
 		                                       parameters[[i]]$type,parameters[[i]]$mix,parameters[[i]]$rows,
@@ -775,12 +775,6 @@ else
    pimtypes=pimtypes[!null.design.data]
    names(pimtypes)=names(parameters)
    full.design.data$pimtypes=pimtypes
-   if(data$model%in%c("HidMarkov","HMMMSJollySeber")){
-     full.design.data$Delta=full.design.data$Delta[order(full.design.data$Delta$group,full.design.data$Delta$event,full.design.data$Delta$stratum),]
-     full.design.data$Delta$par.index=min(full.design.data$Delta$par.index):max(full.design.data$Delta$par.index)
-     full.design.data$Delta$model.index=min(full.design.data$Delta$model.index):max(full.design.data$Delta$model.index)
-     rownames(full.design.data$Delta)=1:nrow(full.design.data$Delta)
-   }
    return(full.design.data)
 }
 
