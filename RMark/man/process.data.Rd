@@ -20,7 +20,10 @@ process.data(
   counts = NULL,
   reverse = FALSE,
   areas = NULL,
-  events = NULL
+  events = NULL,
+  neventsp = NULL,
+  neventsr = NULL,
+  neventsR = NULL
 )
 }
 \arguments{
@@ -76,6 +79,12 @@ survival (S) in Multistratum models}
 \item{areas}{values of areas (1 per group) for Densitypc set of models}
 
 \item{events}{vector of character events for Hidden Markov models}
+
+\item{neventsp}{number of events for recaptures in MSUncBarker and MSUnc2Barker models}
+
+\item{neventsr}{number of events for dead recoveries in MSUncBarker and MSUnc2Barker models}
+
+\item{neventsR}{number of events for live resightings and living throughtout the interval or live resightings before death in the interval in MSUncBarker and MSUnc2Barker}
 }
 \value{
 processed.data (a list with the following elements)

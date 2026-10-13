@@ -100,7 +100,7 @@ nocc must be specified for this model}
 
 \item{output}{If TRUE produces summary of model input and model output}
 
-\item{invisible}{If TRUE, window for running MARK is hidden}
+\item{invisible}{If TRUE, window for running MARK is hidden; if TRUE output set to FALSE}
 
 \item{adjust}{If TRUE, adjusts npar to number of cols in design matrix,
 modifies AIC and records both}
