@@ -38,10 +38,10 @@
 #' Time variable defaults to FALSE for legacy reasons but should be set to TRUE
 #' for models that share formula like p and c with the Time model
 #' @param sub.stratum the number of strata to subtract for parameters that use 
-#' mlogit across strata like pi and Omega for RDMSOpenMisClass
+#' mlogit across strata like pi and Omega for RDMSOpenMisClass; it is set in sub.stratum field of parameters.txt
 #' @param limits For RDMSOccRepro values that set row and col (if any) start on states
 #' @param events vector of events if needed for parameter
-#' @param use.events if TRUE, adds events to design data
+#' @param use.events if TRUE, adds events to design data; this value comes from events field in parameters.txt
 #' @param mscale scalar for multi-scale occupancy model (number of mixtures)
 #' @param subtract.events for each stratum either the stratum or event to compute by subtraction for mlogit parameter
 #' @return design.data: a data frame containing all of the design data fields
@@ -95,7 +95,7 @@ function(data,begin,num,type="Triang",mix=FALSE,rows=0,pim.type="all",
   else
   {
   #
-  #  pim.type field allows either all-different or time pims for Triangular pims
+  #  pim.type field allows either all-different or time/constant pims for Triangular pims
   #
 	 if(is.null(mix) || !mix)
 		num.rows=1
@@ -116,9 +116,9 @@ function(data,begin,num,type="Triang",mix=FALSE,rows=0,pim.type="all",
      time.intervals=data$time.intervals
   number.of.groups=dim(data$freq)[2]
   design.data=NULL
-  nsubtract.stratum=match(subtract.stratum,strata.labels)
+  nsubtract.stratum=match(subtract.stratum,strata.labels) # position of strata to subtract from subtract.stratum
   all.tostrata=FALSE
-  if(sub.stratum==-1)
+  if(sub.stratum==-1)  # Currently this is only for ORDPdMS model
   {
 	  all.tostrata=TRUE
 	  sub.stratum=0
@@ -127,8 +127,11 @@ function(data,begin,num,type="Triang",mix=FALSE,rows=0,pim.type="all",
 	  start.stratum=1
   else
 	  start.stratum=as.numeric(limits[1])
+  # handle any events for a parameter
   num.events=1
   if(!is.null(use.events)) num.events=length(events)
+  # if subtract.events set, create eventslist which contain for each stratum 
+  # both a stratum value and event values that are not subtracted 
   if(!is.null(subtract.events))
   {
     eventslist=vector("list",length=nstrata)
@@ -138,8 +141,10 @@ function(data,begin,num,type="Triang",mix=FALSE,rows=0,pim.type="all",
       eventslist[[jj]]=possible.events[!possible.events%in%subtract.events[jj]]
     }
   }
+  # loop over each event
   for(jjj in 1:num.events)
   {
+    # if 
     if(!is.null(use.events)) 
     {
       if(!is.null(subtract.stratum))
@@ -148,7 +153,13 @@ function(data,begin,num,type="Triang",mix=FALSE,rows=0,pim.type="all",
         stratum.set=start.stratum:(nstrata-sub.stratum)
       
     } else
-      stratum.set=start.stratum:(nstrata-sub.stratum)
+    {
+      if(!is.null(subtract.stratum)&!tostrata)
+        stratum.set=(1:nstrata)[!(1:nstrata)%in%nsubtract.stratum]
+      else
+        stratum.set=start.stratum:(nstrata-sub.stratum)
+    }
+
   for(j in 1:number.of.groups)
   for (jj in stratum.set)
   {

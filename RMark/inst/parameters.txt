@@ -168,7 +168,7 @@ IELogitNormalMR	alpha	0	-1	0	Square	all	identity	~1					TRUE
 IELogitNormalMR	Nstar	0			Square	all	log	~session					TRUE										
 RDMSOpenMisClass	S	0	-1	1	Triang	all	logit	~stratum					FALSE	TRUE									
 RDMSOpenMisClass	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum					FALSE	TRUE	TRUE								
-RDMSOpenMisClass	pi	1	-2		Square	all	mlogit	~1					FALSE	TRUE		1							
+RDMSOpenMisClass	pi	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMisClass	Omega	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMisClass	p	0	0	0	Square	all	logit	~1					TRUE	TRUE									
 RDMSOpenMisClass	Delta	0	0	0	Square	all	logit	~1					TRUE	TRUE									
@@ -176,7 +176,7 @@ RDMSOpenMisClass	pent	0	-1	0	Square	all	mlogit	~1					TRUE	TRUE
 RDMSOpenMisClass	Phi	0	-1	1	Triang	all	logit	~1					TRUE	TRUE									
 RDMSMisClass	S	0	-1	1	Triang	all	logit	~stratum					FALSE	TRUE									
 RDMSMisClass	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum					FALSE	TRUE	TRUE								
-RDMSMisClass	pi	1	-2		Square	all	mlogit	~1					FALSE	TRUE		1							
+RDMSMisClass	pi	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSMisClass	Omega	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSMisClass	p	0	0	0	Square	all	logit	~1					TRUE	TRUE									
 RDMSMisClass	Delta	0	0	0	Square	all	logit	~1					TRUE	TRUE									
@@ -433,7 +433,7 @@ RDMSOccRepro	p	0	0	0	Square	all	logit	~1			FALSE		TRUE	TRUE					1
 RDMSOccRepro	Delta	1	0	0	Square	all	logit	~1			FALSE		TRUE	TRUE	TRUE				22				
 RDMSOpenMCSeas	S	0	-1	1	Triang	all	logit	~stratum					FALSE	TRUE									
 RDMSOpenMCSeas	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum					FALSE	TRUE	TRUE								
-RDMSOpenMCSeas	pi	1	-2		Square	all	mlogit	~1					FALSE	TRUE		1							
+RDMSOpenMCSeas	pi	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMCSeas	Omega	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMCSeas	p	0	0	0	Square	all	logit	~1					TRUE	TRUE									
 RDMSOpenMCSeas	Delta	0	0	0	Triang	all	logit	~1					TRUE	TRUE									
@@ -572,7 +572,7 @@ MSJollySeber	pent	1	-1	0	Square	all	mlogit	~1						TRUE
 MSJollySeber	pi	0	1		Square	all	mlogit	~1						TRUE		1				
 RDMSOpenMCSeas2	S	0	-1	1	Triang	all	logit	~stratum					FALSE	TRUE									
 RDMSOpenMCSeas2	Psi	0	-1	0	Triang	all	mlogit	~-1+stratum:tostratum					FALSE	TRUE	TRUE								
-RDMSOpenMCSeas2	pi	1	-2		Square	all	mlogit	~1					FALSE	TRUE		1							
+RDMSOpenMCSeas2	pi	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMCSeas2	Omega	0	0		Square	all	mlogit	~1					FALSE	TRUE		1							
 RDMSOpenMCSeas2	p	0	0	0	Triang	all	logit	~1					TRUE	TRUE									
 RDMSOpenMCSeas2	Delta	0	0	0	Triang	all	logit	~1					TRUE	TRUE									
@@ -673,7 +673,7 @@ MSUncBarker	Delta	1	-1	1	Triang	all	mlogit	~stratum						TRUE						TRUE
 MSUncBarker	rho	0	0	1	Triang	all	mlogit	~stratum	FALSE	rhoPrime				TRUE						TRUE
 MSUncBarker	rhoPrime	0	0	1	Triang	all	mlogit			rho				TRUE						TRUE
 MSUncBarker	b	0	0	1	Triang	all	mlogit	~stratum						TRUE						TRUE
-MSUncBarker	pi	0	0	1	Square	all	mlogit	~1						TRUE		1				TRUE
+MSUncBarker	pi	0	0	1	Square	all	mlogit	~1						TRUE						TRUE
 MSUnc2Barker	S	0	0	1	Triang	all	logit	~stratum						TRUE						
 MSUnc2Barker	Psi	0	0	0	Triang	all	mlogit	~-1+stratum:tostratum						TRUE	TRUE					
 MSUnc2Barker	p	1	-1	0	Triang	all	logit	~stratum						TRUE						
@@ -684,5 +684,5 @@ MSUnc2Barker	Delta	1	-1	1	Triang	all	mlogit	~stratum						TRUE						TRUE
 MSUnc2Barker	rho	0	0	1	Triang	all	mlogit	~stratum	FALSE	rhoPrime				TRUE						TRUE
 MSUnc2Barker	rhoPrime	0	0	1	Triang	all	mlogit			rho				TRUE						TRUE
 MSUnc2Barker	b	0	0	1	Triang	all	mlogit	~stratum						TRUE						TRUE
-MSUnc2Barker	pi	0	0	1	Square	all	mlogit	~1						TRUE		1				TRUE
+MSUnc2Barker	pi	0	0	1	Square	all	mlogit	~1						TRUE						TRUE
 				

@@ -455,6 +455,11 @@ else
 # Check validity of parameter list; stop if not valid
 #
   if(!valid.parameters(data$model,parameters)) stop()
+# 
+# Check to warn about duplicate parameter specifications
+#
+  if(any(table(names(parameters))>1))
+    warning("\none or more parameter names duplicated in parameters argument\n")
 #
 #  Setup model and parameters
 #
@@ -466,10 +471,14 @@ else
   subtract.events=NULL
 # 
 # For pi parameter in HidMarkov model, setup subtract.stratum values to avoid problems with number of events >1
+# if subtract.stratum are set make sure they match the length of events
 #
   if(data$model=="HidMarkov")
     if(is.null(parameters$pi$subtract.stratum))
       parameters$pi$subtract.stratum=rep(data$strata.labels[length(data$strata.labels)],length(data$events))
+  if(data$model%in%c("MSUncBarker","MSUnc2Barker"))
+    if(is.null(parameters$pi$subtract.stratum))
+      parameters$pi$subtract.stratum=rep(data$strata.labels[length(data$strata.labels)],length(data$eventsp))
 #
 # Create a data matrix for the each parameter in the model with age, year and cohort for each index
 # This data matrix (design.data) is used below to create the design matrix from the formulas
@@ -511,10 +520,10 @@ else
 		    {
 			      limits=strsplit(parameters[[i]]$subset,"")[[1]]
 			      if(limits[1]=="0")
-			     {
+			      {
 				      strata.labels=c("0",strata.labels)
 				      nstrata=nstrata+1
-			     } 
+			      } 
 		    }
         if(!is.null(parameters[[i]]$tostrata) && parameters[[i]]$tostrata)
         {
@@ -526,10 +535,18 @@ else
         }
         else
         {
-			     if(data$model%in%c("RDMSOpenMCSeas","RDMSOpenMCSeas2","RDMSOpenMisClass","RDMSMisClass","HidMarkov") & names(parameters)[i]%in%c("pi","Omega","Delta"))
+          # models 142,184,126,121,178,179,180
+			     if(data$model%in%c("RDMSOpenMCSeas","RDMSOpenMCSeas2","RDMSOpenMisClass","RDMSMisClass","HidMarkov","MSUncBarker","MSUnc2Barker") & 
+			                   names(parameters)[i]%in%c("pi","Omega","Delta"))
 			     { 
 			       if(!is.null(parameters[[i]]$subtract.stratum))
-			           subtract.stratum=parameters[[i]]$subtract.stratum
+			       {
+			         subtract.stratum=parameters[[i]]$subtract.stratum
+			         if(data$model=="HidMarkov"&&!is.null(parameters[[i]]$events)&&parameters[[i]]$events&&length(parameters[[i]]$subtract.stratum)!=length(data$events))
+			             stop("Number of values in subtract.stratum for ",names(parameters)[i]," must match number of events")
+			         if(data$model%in%c("MSUncBarker","MSUnc2Barker")&&!is.null(parameters[[i]]$events)&&parameters[[i]]$event&&length(parameters[[i]]$subtract.stratum)!=length(data$eventsp))
+			           stop("Number of values in subtract.stratum for ",names(parameters)[i]," must match eventsp")
+			       }
 			       else
 			       {
 			         if(names(parameters)[i]=="Delta")

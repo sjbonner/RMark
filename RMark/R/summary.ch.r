@@ -94,10 +94,17 @@ compute.marray=function(ch,freq,n)
 #  Only use with models with 0/1 LLL format and non-robust
    if(!x$model%in%   c("CJS","POPAN","Pradel","Pradrec","LinkBarker","Pradsen","Pradlambda",
            "Closed","HetClosed","FullHet","Huggins","HugHet","HugFullHet","Jolly"))
-     stop(paste("\n summary.ch will not work for ",x$model))
+   {
+     warning(paste("\n summary.ch will not work for ",x$model))
+     return("STOP")
+   }
+
 #  Stop if !marray and there are any negative frequencies
    if(any(x$freq<0)&!marray)
-      stop("\n Use marray=TRUE, cannot compute resighting matrix with losses on capture\n")
+   {
+     warning("\n Use marray=TRUE, cannot compute resighting matrix with losses on capture\n")
+     return("STOP")
+   }
 #  Create times for resighting and releases
    times=x$begin.time+cumsum(c(0,x$time.intervals))
    releases=times[1:(length(times)-1)]
