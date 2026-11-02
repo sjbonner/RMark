@@ -49,7 +49,7 @@ function(model,nocc,mixtures=1)
 	fdir=system.file(package="RMark")	
 	fdir=file.path(fdir,"models.txt")	
 	model_definitions=read.delim(fdir,header=TRUE,
-	     colClasses=c("numeric","character","character",rep("logical",4),rep("numeric",3),rep("logical",3),"character"))
+	     colClasses=c("numeric","character","character",rep("logical",4),rep("numeric",3),rep("logical",4),"character"))
 	model_def=model_definitions[model_definitions$model==model,]	
     if(nrow(model_def)==0)
     {
