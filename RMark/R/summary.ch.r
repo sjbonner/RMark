@@ -91,9 +91,9 @@ compute.marray=function(ch,freq,n)
 		marray=marray[,-1]
 		return(marray)
 	}
-#  Only use with models with 0/1 LLL format and non-robust
-   if(!x$model%in%   c("CJS","POPAN","Pradel","Pradrec","LinkBarker","Pradsen","Pradlambda",
-           "Closed","HetClosed","FullHet","Huggins","HugHet","HugFullHet","Jolly"))
+#  Only use with models with 0/1 LLL format, not MS and not robust
+   dummy=setup.model(x$model,1,1)
+   if(!dummy$divisor==1 | dummy$strata | dummy$robust | dummy$LD)
    {
      warning(paste("\n summary.ch will not work for ",x$model))
      return("STOP")
