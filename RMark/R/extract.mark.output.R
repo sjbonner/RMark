@@ -113,6 +113,13 @@ function(out,model,adjust,realvcv=FALSE,vcvfile)
 	  return(NULL)
   }
   AICc=type.convert(substr(out[x],locate(x)+4,nchar(out[x])),as.is=TRUE)
+  # get Fletcher chat
+  x=grep("Fletcher chat",out,ignore.case=TRUE)
+  if(length(x)==0) 
+    FletcherChat=NULL
+  else
+     FletcherChat=type.convert(substr(out[x],locate(x)+4,nchar(out[x])),as.is=TRUE)
+  #get links
   if(length(links)==1)
      x1=grep(paste(links,"link"),out,ignore.case=TRUE)
   else 
@@ -253,11 +260,11 @@ function(out,model,adjust,realvcv=FALSE,vcvfile)
     real.vcv=NULL
   if(!is.matrix(param$beta.vcv))param$beta.vcv=as.matrix(param$beta.vcv)
   if(is.null(npar.unadjusted))
-     return(list(lnl=lnl,deviance=deviance,deviance.df=deviance.df,npar=npar,n=n,AICc=AICc,beta=beta,real=real,beta.vcv=param$beta.vcv,derived=param$derived,derived.vcv=param$derived.vcv,
+     return(list(lnl=lnl,deviance=deviance,deviance.df=deviance.df,FletcherChat=FletcherChat,npar=npar,n=n,AICc=AICc,beta=beta,real=real,beta.vcv=param$beta.vcv,derived=param$derived,derived.vcv=param$derived.vcv,
                  covariate.values=covariate.values,singular=singular,real.vcv=real.vcv))
 
   else
-     return(list(lnl=lnl,deviance=deviance,deviance.df=deviance.df,npar=npar,npar.unadjusted=npar.unadjusted,n=n,AICc=AICc,AICc.unadjusted=AICc.unadjusted,
+     return(list(lnl=lnl,deviance=deviance,deviance.df=deviance.df,FletcherChat=FletcherChat,npar=npar,npar.unadjusted=npar.unadjusted,n=n,AICc=AICc,AICc.unadjusted=AICc.unadjusted,
                  beta=beta,real=real,beta.vcv=param$beta.vcv,derived=param$derived,derived.vcv=param$derived.vcv,
                  covariate.values=covariate.values,singular=singular,real.vcv=real.vcv))
 }
