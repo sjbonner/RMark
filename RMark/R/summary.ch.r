@@ -93,12 +93,18 @@ compute.marray=function(ch,freq,n)
 	}
 #  Only use with models with 0/1 LLL format, not MS and not robust
    dummy=setup.model(x$model,1,1)
-   if(!dummy$divisor==1 | dummy$strata | dummy$robust | dummy$LD)
+   if((!dummy$divisor==1 & !dummy$LD) | dummy$strata | dummy$robust)
    {
      warning(paste("\n summary.ch will not work for ",x$model))
      return("STOP")
    }
-
+   # if this is a live-dead format, extract live position characters
+   if(dummy$LD)
+   {
+     chmat=t(sapply(strsplit(x$data$ch,split=""),function(x) rbind(as.numeric(x))))
+     chmat=chmat[,seq(1,ncol(chmat),2)]
+     x$data$ch=apply(chmat,1,paste,collapse="")
+   }
 #  Stop if !marray and there are any negative frequencies
    if(any(x$freq<0)&!marray)
    {
@@ -108,6 +114,7 @@ compute.marray=function(ch,freq,n)
 #  Create times for resighting and releases
    times=x$begin.time+cumsum(c(0,x$time.intervals))
    releases=times[1:(length(times)-1)]
+   if(dummy$LD) times=times[-length(times)]
 #  If this is done bygroup, split the data and freq by group
    freq.table=apply(x$freq,1,sum)
    if(bygroup&!is.null(x$data$group))
