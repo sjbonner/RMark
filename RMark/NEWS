@@ -1,3 +1,26 @@
+RMark 3.3.0 (24 Nov 2026)
+
+NEW FEATURES
+
+* Added models including 176,179-180,183-185. RMark now supports 136 of the 185 models in MARK. The remaining
+unsupprted models are little used models. The full list of supported models can be found by help("MARKmodels"). 
+
+
+* FletcherChat is now extracted from the output and stored in results object for the model.
+
+CHANGE
+
+* The change in version 3.2.0 to sort design data for delta no longer needed and removed.
+
+* Fields were added to models.txt to indicate classes of models including simulate (indicates whether simulation is supported),
+  LD (for live-dead models,)	abundance	(model estimaes abundance), chat (if median chat is available),	nDerived (number of derived parameters).
+  These aren't particularly relevant to the user but control new capabilities being added to the package in a later version including simulation and 
+  median chat calculation.
+
+* Several other changes (not listed here) were made to make.design.data and compute.design.data to handle new supported models.
+  
+
+
 RMark 3.2.0 (22 Sept 2026)
 
 CHANGE

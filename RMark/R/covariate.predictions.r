@@ -677,28 +677,6 @@ for (j in 1:number.of.models)
 	   se.mat[j,]=reals[[j]]$se
 	   weight[j]=model.table$weight[as.numeric(row.names(model.table))==j]	   
    }
-#
-#  Otherwise if this is the first model in the list setup dataframe for
-#  average estimates and average correlation matrix.
-#
-#   if(firstmodel)
-#   {
-#      firstmodel=FALSE
-#      nreals=dim(estimates)[1]
-#      estimates.average=estimates
-#      estimates.average$estimate=0
-#      cor.average=matrix(0,nrow=nreals,ncol=nreals)
-#   }
-#
-#  For each model the estimates are averaged and so is the correlation matrix
-#
-#   estimates.average$estimate=estimates.average$estimate+
-#         estimates$estimate*model.table$weight[as.numeric(row.names(model.table))==j]
-#   cor=vcv.real/outer(estimates$se,estimates$se,"*")
-#   if(any(is.infinite(diag(cor)))) 
-#	   warning("Infinite correlation (se=0) for model  ",j, " for estimate ",which(is.infinite(diag(cor))),"\n")
-#   diag(cor)=1
-#   cor.average=cor.average+cor*model.table$weight[as.numeric(row.names(model.table))==j]
 }
 if(!is.null(dropped.models))
 {
@@ -741,24 +719,6 @@ if(mata)
     mavg.res$ucl[j]=inverse.link(interval[2],link.list$links)
   }
 }
-#
-#  After processing each model, the model averaged se and v-c matrix is
-#  computed.
-#
-#revised=TRUE
-#se.average=rep(0,nreals)
-#for (i in 1:dim(model.table)[1])
-#{
-#   if(i %in% dropped.models) next   
-#   if(revised)
-#	   se.average=se.average+model.table$weight[as.numeric(row.names(model.table))==i]*
-#			   (reals[[i]]$se^2 + (reals[[i]]$estimate-estimates.average$estimate)^2)  
-#   else
-#	   se.average=se.average+model.table$weight[as.numeric(row.names(model.table))==i]*
-#			   sqrt(reals[[i]]$se^2 + (reals[[i]]$estimate-estimates.average$estimate)^2)
-#}
-#if(revised) se.average=sqrt(se.average)
-
 names(reals)=1:number.of.models
 estimates.average$estimate=mavg.res$estimate
 estimates.average$se=mavg.res$se

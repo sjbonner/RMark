@@ -502,39 +502,6 @@ function(model){
    mlogit.parameters=substr(model$links,1,6)=="mlogit" | substr(model$links,1,6)=="MLogit"
    new.indices[mlogit.parameters]=(1:sum(as.numeric(mlogit.parameters)))+max(new.indices)
    new.indices=match(new.indices,sort(unique(new.indices)))
-#
-#   This code that was added in v1.4.5 hsa been removed for v1.6.6 once it became
-#   clear that you cannot simplify mlogit parameters even in the mlogit set
-#   because the summation is only restricted based on the unique real parameters.
-#   Some addtional code in make.mark.model that creates the mlogit.structure
-#   can also probably be eliminated .
-#
-#   mlogit.parameters=substr(model$links,1,6)=="mlogit"
-#   if(any(mlogit.parameters))
-#   {
-#      new.indices[mlogit.parameters]=max(new.indices[mlogit.parameters])*(mlogit.list$structure-1)+
-#                                     new.indices[mlogit.parameters] + max(new.indices)
-#
-#    The following code was added to adjust for different model structures within
-#    a stratum across tostratum.  Without it the mlogit structure doesn't not work
-#    for models with sum tostratum interactions.
-#
-#      for (i in 1:max(mlogit.list$structure))
-#      {
-#         mm=matrix(new.indices[mlogit.parameters][mlogit.list$structure==i],ncol=mlogit.list$ncol)
-#         umm = unique(mm)
-#         rownames(umm) = 1:nrow(umm)
-#         if(nrow(umm)>1)
-#         {
-#            unvals=apply(umm,1,paste,collapse="")
-#            mmvals=apply(mm,1,paste,collapse="")
-#            umm=max(new.indices)+(col(umm)-1)*nrow(umm)+row(umm)
-#            mm=umm[as.numeric(names(unvals)[match(mmvals,unvals)]),]
-#            new.indices[mlogit.parameters][mlogit.list$structure==i]=as.vector(mm)
-#         }
-#     }
-#      new.indices=match(new.indices,sort(unique(new.indices)))
-#  }
    return(new.indices)
 }
 #
@@ -556,24 +523,6 @@ if(type%in%c("Triang","STriang"))
 } else
    return(newlist[pim])
 }
-#check.mlogits=function(model)
-#{
-#   mlogit.parameters=substr(model$links,1,6)=="mlogit" | substr(model$links,1,6)=="MLogit"
-#   if(any(mlogit.parameters))
-#   {
-#      for (i in 1:max(mlogit.list$structure))
-#      {
-#         mm=matrix(model$links[mlogit.parameters][mlogit.list$structure==i],ncol=mlogit.list$ncol)
-#         if(!all(apply(mm,1,function(x)return(length(unique(x))==1))))
-#         {
-#            cat("\n Error in mlogit assignment. This should not happen. Contact maintainer.\n")
-#            print(mm)
-#            stop()
-#         }
-#      }
-#   }
-#   invisible()
-#}
 
 "pim.header"<- function(group,param.name,parameters,ncol,stratum,tostratum,strata.labels,mixtures,session=NULL,socc=NULL,bracket=FALSE,event=NULL,primary=NULL)
 {
@@ -2176,8 +2125,6 @@ create.agenest.var=function(data,init.agevar,time.intervals)
      }
   }
 #
-#  check.mlogits(model)
-#  model$mlogit.structure=NULL
   if(!is.null(model$simplify$links))
   {
      newlinks=model$simplify$links

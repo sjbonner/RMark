@@ -59,13 +59,13 @@ Time variable defaults to FALSE for legacy reasons but should be set to TRUE
 for models that share formula like p and c with the Time model}
 
 \item{sub.stratum}{the number of strata to subtract for parameters that use 
-mlogit across strata like pi and Omega for RDMSOpenMisClass}
+mlogit across strata like pi and Omega for RDMSOpenMisClass; it is set in sub.stratum field of parameters.txt}
 
 \item{limits}{For RDMSOccRepro values that set row and col (if any) start on states}
 
 \item{events}{vector of events if needed for parameter}
 
-\item{use.events}{if TRUE, adds events to design data}
+\item{use.events}{if TRUE, adds events to design data; this value comes from events field in parameters.txt}
 
 \item{mscale}{scalar for multi-scale occupancy model (number of mixtures)}
 
