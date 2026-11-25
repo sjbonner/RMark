@@ -20,7 +20,7 @@ create_markpath=function()
 {
   # Check for user defined executable name
   if(exists("MarkExec")){
-    execs = MarkExec
+    execs = get("MarkExec")
   } else{
     # Default executable names in preference order
     if(R.version$arch %in% c("x86_64","aarch64","arm64"))
